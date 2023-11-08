@@ -217,6 +217,14 @@ config TARGET_CCIMX6QSBC
 	select TARGET_CCIMX6SBC_COMMON
 	depends on MX6Q
 
+config TARGET_CCIMX6_BELLEQUIPMENT_MM3_DEVELOPMENT
+	bool "Bell Equipment Memory Module 3 Development (based on the Digi ConnectCore 6 Dual)"
+	select BOARD_LATE_INIT
+	select SUPPORT_SPL
+	select DM
+	select DM_THERMAL
+	select BOARD_EARLY_INIT_F
+
 config TARGET_CCIMX6QPSBC
 	bool "Digi ConnectCore 6 Plus SBC"
 	select TARGET_CCIMX6SBC_COMMON
@@ -986,6 +994,7 @@ source "board/boundary/nitrogen6x/Kconfig"
 source "board/bticino/mamoj/Kconfig"
 source "board/compulab/cm_fx6/Kconfig"
 source "board/digi/ccimx6sbc/Kconfig"
+source "board/digi/ccimx6-bellequipment-mm3-development/Kconfig"
 source "board/digi/ccimx6ulsbc/Kconfig"
 source "board/digi/ccimx6ulstarter/Kconfig"
 source "board/dhelectronics/dh_imx6/Kconfig"
