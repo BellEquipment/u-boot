@@ -25,9 +25,9 @@
 
 #ifdef CONFIG_MX6QP
 #undef CONFIG_SYS_BOARD
-#define CONFIG_SYS_BOARD		"ccimx6qpsbc"
+#define CONFIG_SYS_BOARD		"ccimx6-bellequipment-mm3-development"
 #endif
-#define CONFIG_BOARD_DESCRIPTION	"SBC"
+#define CONFIG_BOARD_DESCRIPTION	"Bell Equipment MM3 Development"
 
 #define CONFIG_CONS_INDEX		1
 #define CONFIG_MXC_UART_BASE		UART4_BASE
@@ -35,13 +35,7 @@
 #define CONFIG_BAUDRATE			115200
 
 #undef CONFIG_DEFAULT_FDT_FILE
-#if defined(CONFIG_MX6DL) || defined(CONFIG_MX6S)
-#define CONFIG_DEFAULT_FDT_FILE		"imx6dl-" CONFIG_SYS_BOARD ".dtb"
-#elif defined(CONFIG_MX6QP)
-#define CONFIG_DEFAULT_FDT_FILE		"imx6qp-" CONFIG_SYS_BOARD ".dtb"
-#elif defined(CONFIG_MX6Q)
 #define CONFIG_DEFAULT_FDT_FILE		"imx6q-" CONFIG_SYS_BOARD ".dtb"
-#endif
 
 #define CONFIG_SYS_FSL_USDHC_NUM	2
 
@@ -49,8 +43,10 @@
 #define CONFIG_SYS_STORAGE_MEDIA	"mmc"
 
 /* Ethernet PHY */
-#define CONFIG_ENET_PHYADDR_MICREL	3
+#define CONFIG_ENET_PHYADDR_MICREL	1
+#define CONFIG_FEC_XCV_TYPE		RMII
 #define PHY_ANEG_TIMEOUT		8000
+#define CONFIG_ETHPRIME		"FEC"
 
 /* I2C */
 #define CONFIG_SYS_I2C_MXC_I2C1
@@ -97,6 +93,7 @@
 #define CCIMX6SBC_ID130		130
 #define CCIMX6SBC_ID131		131
 #define CCIMX6QPSBC_ID160	160
+#define BELLMM3_DEVELOPMENT 1
 #endif /* CONFIG_HAS_CARRIERBOARD_ID */
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -200,9 +197,26 @@
 	""	/* end line */
 
 #undef CONFIG_BOOTCOMMAND
+#ifdef CONFIG_SECURE_BOOT
+/*
+ * Authenticate bootscript before running it. IVT offset is at
+ * ${filesize} - CONFIG_CSF_SIZE - IVT_SIZE (0x20)
+ * Use 0x4000 as CSF_SIZE, as this is the value used by the script
+ * to sign / encrypt the bootscript
+ */
+#define CONFIG_BOOTCOMMAND \
+	"if run loadscript; then " \
+		"setexpr bs_ivt_offset ${filesize} - 0x4020;" \
+		"if hab_auth_img ${loadaddr} ${bs_ivt_offset}; then " \
+			"source ${loadaddr};" \
+		"fi; " \
+	"fi;"
+#else
 #define CONFIG_BOOTCOMMAND \
 	"if run loadscript; then " \
 		"source ${loadaddr};" \
 	"fi;"
+
+#endif	/* CONFIG_SECURE_BOOT */
 
 #endif                         /* __CCIMX6SBC_CONFIG_H */
