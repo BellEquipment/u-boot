@@ -68,14 +68,32 @@ static iomux_v3_cfg_t const uart4_pads[] = {
 
 #ifdef CONFIG_CONSOLE_ENABLE_GPIO
 static iomux_v3_cfg_t const ext_gpios_pads[] = {
-	MX6_PAD_NANDF_D5__GPIO2_IO05 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_NANDF_D6__GPIO2_IO06 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_NANDF_D7__GPIO2_IO07 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_EIM_CS1__GPIO2_IO24 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_EIM_EB0__GPIO2_IO28 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_EIM_EB1__GPIO2_IO29 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_GPIO_18__GPIO7_IO13 | MUX_PAD_CTRL(GPI_PAD_CTRL),
-	MX6_PAD_GPIO_19__GPIO4_IO05 | MUX_PAD_CTRL(GPI_PAD_CTRL),
+	/* Put the external GPIOs in a known safe state */
+	MX6_PAD_NANDF_D2__GPIO2_IO02     | MUX_PAD_CTRL(GPI_PAD_CTRL), // USER_LED0 - Power Indicator
+	MX6_PAD_NANDF_D3__GPIO2_IO03     | MUX_PAD_CTRL(GPI_PAD_CTRL), // USER_LED1 - Communications
+	MX6_PAD_NANDF_D4__GPIO2_IO04     | MUX_PAD_CTRL(GPI_PAD_CTRL), // USER_LED2 - Heart Beat
+	MX6_PAD_GPIO_18__GPIO7_IO13      | MUX_PAD_CTRL(GPI_PAD_CTRL), // GSM On/Off
+	MX6_PAD_GPIO_19__GPIO4_IO05      | MUX_PAD_CTRL(GPI_PAD_CTRL), // GSM Reset
+	MX6_PAD_EIM_DA10__GPIO3_IO10     | MUX_PAD_CTRL(GPI_PAD_CTRL), // GSM VUSB Enable
+	MX6_PAD_NANDF_RB0__GPIO6_IO10    | MUX_PAD_CTRL(GPI_PAD_CTRL), // Communications Inhibit
+	MX6_PAD_SD3_DAT2__GPIO7_IO06     | MUX_PAD_CTRL(GPI_PAD_CTRL), // Communication Power Cycle
+	MX6_PAD_GPIO_9__GPIO1_IO09       | MUX_PAD_CTRL(GPI_PAD_CTRL), // BT_DISABLE_N
+	MX6_PAD_NANDF_D5__GPIO2_IO05     | MUX_PAD_CTRL(GPI_PAD_CTRL), // IO Controller Reset
+	MX6_PAD_NANDF_D7__GPIO2_IO07     | MUX_PAD_CTRL(GPI_PAD_CTRL), // EXP_GPIO_2
+	MX6_PAD_EIM_CS1__GPIO2_IO24      | MUX_PAD_CTRL(GPI_PAD_CTRL), // GPIO_3 - Test Point
+	MX6_PAD_EIM_EB1__GPIO2_IO29      | MUX_PAD_CTRL(GPI_PAD_CTRL), // Iridium On/Off
+	MX6_PAD_EIM_D23__GPIO3_IO23      | MUX_PAD_CTRL(GPI_PAD_CTRL), // Capacitor Good GSM
+	MX6_PAD_EIM_D27__GPIO3_IO27      | MUX_PAD_CTRL(GPI_PAD_CTRL), // Capacitor Filter GSM
+	MX6_PAD_CSI0_DATA_EN__GPIO5_IO20 | MUX_PAD_CTRL(GPI_PAD_CTRL), // Power Fail Status Output for GSM
+	MX6_PAD_EIM_A25__GPIO5_IO02      | MUX_PAD_CTRL(GPI_PAD_CTRL), // 5V System Good GSM
+	MX6_PAD_EIM_EB0__GPIO2_IO28      | MUX_PAD_CTRL(GPI_PAD_CTRL), // UC GSM Power Monitor
+	MX6_PAD_NANDF_D6__GPIO2_IO06     | MUX_PAD_CTRL(GPI_PAD_CTRL), // Iridium Network
+	MX6_PAD_EIM_DA15__GPIO3_IO15     | MUX_PAD_CTRL(GPI_PAD_CTRL), // Capacitor Good Iridium
+	MX6_PAD_EIM_LBA__GPIO2_IO27      | MUX_PAD_CTRL(GPI_PAD_CTRL), // Capacitor Filter Iridium
+	MX6_PAD_EIM_D28__GPIO3_IO28      | MUX_PAD_CTRL(GPI_PAD_CTRL), // Power Fail Status Output for Iridium
+	MX6_PAD_EIM_D29__GPIO3_IO29      | MUX_PAD_CTRL(GPI_PAD_CTRL), // 5V System Good Iridium
+	MX6_PAD_SD3_DAT3__GPIO7_IO07     | MUX_PAD_CTRL(GPI_PAD_CTRL), // Power Good Communication
+	MX6_PAD_EIM_CS0__GPIO2_IO23      | MUX_PAD_CTRL(GPI_PAD_CTRL), // IO IRQ
 };
 
 static void setup_iomux_ext_gpios(void)
@@ -85,31 +103,14 @@ static void setup_iomux_ext_gpios(void)
 }
 #endif /* CONFIG_CONSOLE_ENABLE_GPIO */
 
-static iomux_v3_cfg_t const ksz9031_pads[] = {
-	/* Micrel KSZ9031 PHY reset */
-	MX6_PAD_ENET_CRS_DV__GPIO1_IO25		| MUX_PAD_CTRL(NO_PAD_CTRL),
-};
-
-static iomux_v3_cfg_t const sgtl5000_audio_pads[] = {
-	/*
-	 * Audio lines must be configured as GPIO inputs when coming
-	 * from a software reset, since the audio chip itself does not have a
-	 * reset line, and the codec might get power from I2S lines otherwise.
-	 */
-	MX6_PAD_CSI0_DAT7__GPIO5_IO25 | MUX_PAD_CTRL(NO_PAD_CTRL), /* RXD */
-	MX6_PAD_CSI0_DAT4__GPIO5_IO22 | MUX_PAD_CTRL(NO_PAD_CTRL), /* TXC */
-	MX6_PAD_CSI0_DAT5__GPIO5_IO23 | MUX_PAD_CTRL(NO_PAD_CTRL), /* TXD */
-	MX6_PAD_CSI0_DAT6__GPIO5_IO24 | MUX_PAD_CTRL(NO_PAD_CTRL), /* TXFS */
-};
-
-static iomux_v3_cfg_t const sgtl5000_pwr_pads[] = {
-	/* SGTL5000 audio codec power enable (external 4K7 pull-up) */
+static iomux_v3_cfg_t const ksz8061_pads[] = {
+	/* Micrel KSZ8061 PHY reset */
 	MX6_PAD_EIM_OE__GPIO2_IO25 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
-static iomux_v3_cfg_t const pcie_pwr_pads[] = {
-	/* PCIe power enable */
-	MX6_PAD_NANDF_RB0__GPIO6_IO10 | MUX_PAD_CTRL(NO_PAD_CTRL),
+static iomux_v3_cfg_t const usb_rst_pads[] = {
+	/* USB hub reset line */
+	MX6_PAD_EIM_DA10__GPIO3_IO10 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 #ifdef CONFIG_SYS_I2C_MXC
@@ -173,11 +174,10 @@ static void setup_board_enet(void)
 {
 	int phy_reset_gpio;
 
-	/* Gigabit ENET (Micrel PHY) */
-	phy_reset_gpio = IMX_GPIO_NR(1, 25);
+	/* 100BaseT ENET (Micrel PHY) */
+	phy_reset_gpio = IMX_GPIO_NR(2, 25);
 	phy_addr = CONFIG_ENET_PHYADDR_MICREL;
-	imx_iomux_v3_setup_multiple_pads(ksz9031_pads,
-					 ARRAY_SIZE(ksz9031_pads));
+	imx_iomux_v3_setup_multiple_pads(ksz8061_pads, ARRAY_SIZE(ksz8061_pads));
 	/* Assert PHY reset */
 	gpio_request(phy_reset_gpio, "ENET PHY Reset");
 	gpio_direction_output(phy_reset_gpio , 0);
@@ -185,8 +185,11 @@ static void setup_board_enet(void)
 	udelay(10 * 1000);
 	/* Deassert PHY reset */
 	gpio_set_value(phy_reset_gpio, 1);
-	/* Need to wait 100us before accessing the MIIM (MDC/MDIO) */
-	udelay(100);
+	/* The spec says the FEC needs to wait 100us before
+	 * accessing the MIIM (MDC/MDIO). Experimantation has
+	 * proved that more time is needed, we use double the
+	 * spec requirement */
+	udelay(200);
 }
 
 int board_get_enet_phy_addr(void)
@@ -265,77 +268,83 @@ static void setup_iomux_uart(void)
 	imx_iomux_v3_setup_multiple_pads(uart4_pads, ARRAY_SIZE(uart4_pads));
 }
 
+/* This comes from ccimx6.c */
+#define ENET_NORMAL_PAD_CTRL  (PAD_CTL_PKE | PAD_CTL_PUE |		\
+	PAD_CTL_PUS_100K_UP | PAD_CTL_SPEED_MED   |		\
+	PAD_CTL_DSE_40ohm   | PAD_CTL_HYS)
+
+#define ENET_CLK_PAD_CTRL  (PAD_CTL_PKE | PAD_CTL_PUE |		\
+	PAD_CTL_PUS_100K_UP | PAD_CTL_SPEED_LOW   |		\
+	PAD_CTL_DSE_40ohm   | PAD_CTL_SRE_FAST    | PAD_CTL_HYS)
+
+static iomux_v3_cfg_t const enet_pads_100[] = {
+	MX6_PAD_ENET_MDIO__ENET_MDIO     | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_MDC__ENET_MDC       | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_TXD0__ENET_TX_DATA0 | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_TXD1__ENET_TX_DATA1 | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_RXD0__ENET_RX_DATA0 | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_RXD1__ENET_RX_DATA1 | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_GPIO_16__ENET_REF_CLK    | MUX_PAD_CTRL(ENET_CLK_PAD_CTRL),
+	MX6_PAD_ENET_RX_ER__ENET_RX_ER   | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_TX_EN__ENET_TX_EN   | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+	MX6_PAD_ENET_CRS_DV__ENET_RX_EN  | MUX_PAD_CTRL(ENET_NORMAL_PAD_CTRL),
+};
+
+/* altered from 'setup_iomux_enet' in 'ccimx6.c' */
+static void setup_iomux_enet_bell_mm3 ( void )
+{
+	/* 10/100 ENET */
+	enet_xcv_type = RMII;
+	imx_iomux_v3_setup_multiple_pads(enet_pads_100, ARRAY_SIZE(enet_pads_100));
+}
+
 int board_eth_init(struct bd_info *bis)
 {
 	if (is_mx6dqp()) {
 		int ret;
 
-		/* select ENET MAC0 TX clock from PLL */
-		imx_iomux_set_gpr_register(5, 9, 1, 1);
-		ret = enable_fec_anatop_clock(0, ENET_125MHZ);
-		if (ret)
-			printf("Error fec anatop clock settings!\n");
-	}
+		debug("Initialising enet board\n");
 
-	setup_iomux_enet();
-	setup_board_enet();
+		/* Ref: IMX6DQ6SDLHDG (Hardware Development Guide) */
+		setup_iomux_enet_bell_mm3();
+		setup_board_enet();
+
+
+		/* Get ENET reference clock from external clock (Ethernet PHY)
+		 * GPR1[21] = 0
+		 */
+		imx_iomux_set_gpr_register(1, 21, 1, 0);
+
+		struct anatop_regs __iomem *anatop = (struct anatop_regs __iomem *)ANATOP_BASE_ADDR;
+		u32 reg = readl(&anatop->pll_enet);
+		s32 timeout = 100000;
+
+		/* Setup the Analog PLLs (Disable PLL) */
+		reg &= ~BM_ANADIG_PLL_ENET_DIV_SELECT;
+
+		/* Setup clock rate to 50MHz */
+		reg |= BF_ANADIG_PLL_ENET_DIV_SELECT(ENET_50MHZ);
+
+		if ((reg & BM_ANADIG_PLL_ENET_POWERDOWN) ||
+			(!(reg & BM_ANADIG_PLL_ENET_LOCK))) {
+			reg &= ~BM_ANADIG_PLL_ENET_POWERDOWN;
+			writel(reg, &anatop->pll_enet);
+			while (timeout--) {
+				/* Wait for PLL to lock */
+				if (readl(&anatop->pll_enet) & BM_ANADIG_PLL_ENET_LOCK)
+					break;
+			}
+			if (timeout < 0)
+				printf("Error fec anatop clock settings, timeout!\n");
+		}
+
+		/* Enable FEC clock */
+		reg &= ~BM_ANADIG_PLL_ENET_ENABLE;
+		reg &= ~BM_ANADIG_PLL_ENET_BYPASS;
+		writel(reg, &anatop->pll_enet);
+	}
 
 	return cpu_eth_init(bis);
-}
-
-static int board_has_audio(void)
-{
-	switch(board_id) {
-	case CCIMX6SBC_ID129:
-	case CCIMX6SBC_ID130:
-	case CCIMX6QPSBC_ID160:
-		return 1;
-	default:
-		return 0;
-	}
-}
-
-static void setup_board_audio(void)
-{
-	/*
-	 * The codec does not have a reset line so after a reset the
-	 * ADC may be active and spitting noise.
-	 * Power it off by pulling the power enable line down (it is externally
-	 * pulled-up, and thus audio codec is ON by default) and configuring
-	 * the audio lines as GPIO inputs (the codec might get power from I2S
-	 * lines otherwise).
-	 */
-
-	/* Audio lines IOMUX */
-	imx_iomux_v3_setup_multiple_pads(sgtl5000_audio_pads,
-					 ARRAY_SIZE(sgtl5000_audio_pads));
-
-	/* SBC version 2 and later use a GPIO to power enable the audio codec */
-	if (board_version >= 2) {
-		int pwren_gpio = IMX_GPIO_NR(2, 25);
-
-		/* Power enable line IOMUX */
-		imx_iomux_v3_setup_multiple_pads(sgtl5000_pwr_pads,
-						 ARRAY_SIZE(sgtl5000_pwr_pads));
-		gpio_request(pwren_gpio, "Codec power enable");
-		gpio_direction_output(pwren_gpio , 0);
-	}
-}
-
-static void setup_board_pcie(void)
-{
-	/* SBC version 2 and later use a GPIO to power enable the PCIe */
-	if (((board_id == CCIMX6SBC_ID129) || (board_id == CCIMX6SBC_ID130) ||
-	    (board_id == CCIMX6QPSBC_ID160)) && board_version >= 2) {
-		int pcie_pwren_gpio = IMX_GPIO_NR(6, 10);
-
-		/* PCIe Power enable line IOMUX */
-		imx_iomux_v3_setup_multiple_pads(pcie_pwr_pads,
-						 ARRAY_SIZE(pcie_pwr_pads));
-		/* Switching off PCIe power */
-		gpio_request(pcie_pwren_gpio, "PCIe power enable");
-		gpio_direction_output(pcie_pwren_gpio , 0);
-	}
 }
 
 int board_mmc_getcd(struct mmc *mmc)
@@ -355,6 +364,37 @@ int board_mmc_getcd(struct mmc *mmc)
 
 	return ret;
 }
+
+#ifdef CONFIG_USB_EHCI_MX6
+#ifndef CONFIG_DM_USB
+int board_ehci_hcd_init(int port)
+{
+	int usb_rst_gpio = IMX_GPIO_NR(3, 10);
+
+	switch (port) {
+	case 0:
+		/* USB OTG */
+		break;
+	case 1:
+		/* USB hub reset line IOMUX */
+		imx_iomux_v3_setup_multiple_pads(usb_rst_pads,
+						ARRAY_SIZE(usb_rst_pads));
+
+		/* Reset USB hub */
+		gpio_request(usb_rst_gpio, "USB hub reset");
+		gpio_direction_output(usb_rst_gpio, 0);
+		mdelay(2);
+		gpio_set_value(usb_rst_gpio, 1);
+		break;
+	default:
+		printf("MXC USB port %d not supported\n", port);
+		return -EINVAL;
+	}
+
+	return 0;
+}
+#endif
+#endif
 
 int board_early_init_f(void)
 {
@@ -379,19 +419,20 @@ int board_init(void)
 #ifdef CONFIG_SATA
 	setup_iomux_sata();
 #endif
-	if (board_has_audio())
-		setup_board_audio();
-
-	setup_board_pcie();
 
 	return 0;
 }
+
+#define DEVELOPMENT_VERSION (0)
 
 int checkboard(void)
 {
 	print_ccimx6_info();
 	print_carrierboard_info();
 	printf("Boot device: %s\n", get_boot_device_name());
+	printf("Config:      %s\n", "Bell MM3 Development Board"));
+	printf("Version:     %d\n", DEVELOPMENT_VERSION));
+
 	return 0;
 }
 
@@ -438,29 +479,226 @@ int board_late_init(void)
 {
 	int ret;
 
-#ifdef CONFIG_CONSOLE_ENABLE_GPIO
-	const char *ext_gpios[] = {
-		"GPIO2_5",
-		"GPIO2_6",
-		"GPIO2_7",
-		"GPIO2_24",
-		"GPIO2_28",
-		"GPIO2_29",
-		"GPIO7_13",
-		"GPIO4_5",
+	int ext_gpios[] =  {
+		IMX_GPIO_NR(2, 2),	// 0 - USER_LED0 - Power Indicator
+		IMX_GPIO_NR(2, 3),	// 1 - USER_LED1 - Communications
+		IMX_GPIO_NR(2, 4),	// 2 - USER_LED2 - Heart Beat
+
+		/* Communications board signals */
+		// Output(s)
+		IMX_GPIO_NR(6, 10),	// 3 - Communications Inhibit
+		IMX_GPIO_NR(7, 6),	// 4 - Communication Power Cycle
+		// Input(s)
+		IMX_GPIO_NR(7, 7),	// 5 - Power Good Communication
+
+		/* GSM signals */
+		// Output(s)
+		IMX_GPIO_NR(7, 13),	// 6 - GSM On/Off
+		IMX_GPIO_NR(4, 5),	// 7 - GSM Reset
+		IMX_GPIO_NR(3, 10),	// 8 - GSM VUSB Enable
+		// Input(s)
+		IMX_GPIO_NR(3, 23)	//  9 - Capacitor Good GSM
+		IMX_GPIO_NR(3, 27),	// 10 - Capacitor Filter GSM
+		IMX_GPIO_NR(5, 20),	// 11 - Power Fail Status Output for GSM
+		IMX_GPIO_NR(5, 2),	// 12 - 5V System Good GSM
+		IMX_GPIO_NR(2, 28),	// 13 - UC GSM Power Monitor
+
+		/* Iridium signals */
+		// Output(s)
+		IMX_GPIO_NR(2, 29),	// 14 - Iridium On/Off
+		// Input(s)
+		IMX_GPIO_NR(2, 6),	// 15 - Iridium Network
+		IMX_GPIO_NR(3, 15),	// 16 - Capacitor Good Iridium
+		IMX_GPIO_NR(2, 27),	// 17 - Capacitor Filter Iridium
+		IMX_GPIO_NR(3, 28),	// 18 - Power Fail Status Output for Iridium
+		IMX_GPIO_NR(3, 29),	// 19 - 5V System Good Iridium
+
+		/* Misc */
+		// Outputs
+		IMX_GPIO_NR(2, 5),	// 20 - IO Controller Reset
+		IMX_GPIO_NR(2, 7),	// 21 - EXP_GPIO_2
+		IMX_GPIO_NR(2, 24)	// 22 - GPIO_3 - Test Point
+		IMX_GPIO_NR(1, 9),	// 23 - BT_DISABLE_N
+		// Inputs
+		IMX_GPIO_NR(2, 23)	// 24 - IO IRQ
 	};
-	const char *ext_gpio_name = ext_gpios[CONFIG_CONSOLE_ENABLE_GPIO_NR];
 
-	setup_iomux_ext_gpios();
+	int gpio_pin;
+	char gpioTag[32];
+	bool gpio_state = true;
 
-	if (console_enable_gpio(ext_gpio_name))
-		gd->flags &= ~(GD_FLG_DISABLE_CONSOLE | GD_FLG_SILENT);
-#endif
+	/* Switch on the power LED, and off the other LEDs */
+	{
+		snprintf(gpioTag, sizeof(gpioTag), "Power LED");
+		gpio_pin = ext_gpios[0];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 1);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Power LED failed\n");
+			gpio_state = false;
+		}
+
+		for ( int i = 1 ; i < 3 ; i++ )
+		{
+			snprintf(gpioTag, sizeof(gpioTag), "LED %s", (i==1)?"Comms":"Heart Beat");
+			gpio_pin = ext_gpios[i];
+			gpio_request(gpio_pin, gpioTag);
+			gpio_direction_output(gpio_pin , 0);
+			if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+			{
+				printf("%s LED failed\n", (i==1)?"Comms":"Heart Beat");
+				gpio_state = false;
+			}
+		}
+	}
+
+	/* Communications board signals */
+	{
+		// Activate communications board
+		snprintf(gpioTag, sizeof(gpioTag), "CommsInh");
+		gpio_pin = ext_gpios[3];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 0);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting Comms Ihb failed\n");
+			gpio_state = false;
+		}
+
+		// Pull the Backup Boost Converter pin low
+		snprintf(gpioTag, sizeof(gpioTag), "CommsInh");
+		gpio_pin = ext_gpios[4];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 0);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting Comms Ihb failed\n");
+			gpio_state = false;
+		}
+
+		// Set the Power Good Communication pin as input
+		snprintf(gpioTag, sizeof(gpioTag), "Power Good Comms");
+		gpio_pin = ext_gpios[5];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_input(gpio_pin);
+	}
+
+	/* GSM signals */
+	{
+		// Activate GSM modem
+		// PWR_ON low time to switch-on the module is 50us, max is 80us
+		snprintf(gpioTag, sizeof(gpioTag), "GSM_PWR_ON");
+		gpio_pin = ext_gpios[6];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 1);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting GSM Power On failed\n");
+			gpio_state = false;
+		}
+		udelay(60);
+		gpio_direction_output(gpio_pin , 0);
+
+		// Pull the reset pin high
+		snprintf(gpioTag, sizeof(gpioTag), "GSM_RST");
+		gpio_pin = ext_gpios[7];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 0);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting GSM reset failed\n");
+			gpio_state = false;
+		}
+
+		// Pull the GSM USB detect pin high
+		snprintf(gpioTag, sizeof(gpioTag), "GSM_USB_EN") ;
+		gpio_pin = ext_gpios[8];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 0);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting GSM USB Enable failed\n");
+			gpio_state = false;
+		}
+
+		// Set other pins as inputs
+		for ( int i = 9 ; i < 14 ; i++ )
+		{
+			snprintf(gpioTag, sizeof(gpioTag), "GSM %d", i) ;
+			gpio_pin = ext_gpios[i];
+			gpio_request(gpio_pin, gpioTag);
+			gpio_direction_input(gpio_pin);
+		}
+	}
+
+	/* Iridium signals */
+	{
+		// Activate Iridium modem
+		// A high on the On/Off pin switches the modem on
+		snprintf(gpioTag, sizeof(gpioTag), "IRI_PWR_ON") ;
+		gpio_pin = ext_gpios[14];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin , 1);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting Iridium Power On failed\n");
+			gpio_state = false;
+		}
+
+		// Set other pins as inputs
+		for ( int i = 15 ; i < 20 ; i++ )
+		{
+			snprintf(gpioTag, sizeof(gpioTag), "Iridium %d", i) ;
+			gpio_pin = ext_gpios[i];
+			gpio_request(gpio_pin, gpioTag);
+			gpio_direction_input(gpio_pin);
+		}
+	}
+
+	/* IO Controller signals */
+	{
+		// Activate IO Controller
+		// A high on the IO Controller will reset the TC233
+		snprintf(gpioTag, sizeof(gpioTag), "IO_CTRL") ;
+		gpio_pin = ext_gpios[20];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin, 1);
+		if (IS_ERR_VALUE(gpio_get_value(gpio_pin)))
+		{
+			printf("Resetting the TC233 failed\n");
+			gpio_state = false;
+		}
+		// Wait 20msec for power to stebilise
+		mdelay(20);
+
+		// Release the reset on the TC233
+		gpio_direction_output(gpio_pin, 1);
+		if (IS_ERR_VALUE(gpio_get_value(gpio_pin)))
+		{
+			printf("Setting the TC233 failed\n");
+			gpio_state = false;
+		}
+
+		snprintf(gpioTag, sizeof(gpioTag), "BT_DISABLE_N");
+		gpio_pin = ext_gpios[23];
+		gpio_request(gpio_pin, gpioTag);
+		gpio_direction_output(gpio_pin, 1);
+		if ( IS_ERR_VALUE(gpio_get_value(gpio_pin)) )
+		{
+			printf("Setting Bluetooth Disable failed\n");
+			gpio_state = false;
+		}
+	}
+
+	printf("MM3 GPIOs: %s\n", ((gpio_state)?"Initialised":"Initialisation failed"));
+
 	/* SOM late init */
 	ret = ccimx6_late_init();
-	if (!ret)
+	if ( !ret )
+	{
 		ret = board_fixup();
-
+	}
 	/* Set default dynamic variables */
 	platform_default_environment();
 

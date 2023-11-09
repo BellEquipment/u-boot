@@ -1,7 +1,7 @@
-if TARGET_CCIMX6SBC
+if TARGET_CCIMX6_BELLEQUIPMENT_MM3_DEVELOPMENT
 
 config SYS_BOARD
-	default "ccimx6sbc"
+	default "ccimx6-bellequipment-mm3-development"
 
 config SYS_VENDOR
 	default "digi"
@@ -10,6 +10,6 @@ config SYS_SOC
 	default "mx6"
 
 config SYS_CONFIG_NAME
-	default "ccimx6sbc"
+	default "ccimx6-bellequipment-mm3-development"
 
 endif
