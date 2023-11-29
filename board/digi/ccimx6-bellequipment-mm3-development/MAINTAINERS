@@ -1,0 +1,9 @@
+CCIMX6-BELLEQUIPMENT-MM3-DEVELOPMENT BOARD
+M:	Pieter Kruger <pieter.kruger@bellequipment.com>
+S:	Supported
+F:	arch/arm/dts/imx6q-ccimx6-bellequipment-mm3-development.dts
+F:	arch/arm/dts/imx6q-ccimx6-bellequipment-mm3-development.dtsi
+F:	arch/arm/dts/imx6qdl-ccimx6-bellequipment-mm3-development.dtsi
+F:	board/digi/ccimx6-bellequipment-mm3-development/
+F:	include/configs/ccimx6-bellequipment-mm3-development.h
+F:	configs/ccimx6-bellequipment-mm3-development_defconfig

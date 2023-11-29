@@ -1,0 +1,110 @@
+/*
+ * Copyright 2016 Digi International, Inc.
+ *
+ * The code contained herein is licensed under the GNU General Public
+ * License. You may obtain a copy of the GNU General Public License
+ * Version 2 or later at the following locations:
+ *
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+
+/dts-v1/;
+#include <dt-bindings/gpio/gpio.h>
+/* i.MX6 Quad/Dual CPU */
+#include "imx6q.dtsi"
+/* ConnectCore 6 (Quad wireless/bluetooth variant) */
+#include "imx6q-ccimx6-wb.dtsi"
+/* ConnectCore 6 Bell Equipment MM3 Development Board */
+#include "imx6q-ccimx6-bellequipment-mm3-development.dtsi"
+
+&fec {
+	status = "okay";
+};
+
+&caam_keyblob {
+	status = "okay";
+};
+
+&ecspi1 {
+	status = "okay";
+
+	/*
+	 * Add your slave devices here. Next is an example of spidev.
+	 * Expect a harmless kernel warning if you enable spidev as slave.
+	 */
+	spidev@0 {
+		reg = <0>; /*chipselect*/
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "bellequipment,mm3-io-controller";
+		spi-max-frequency = <4000000>;
+	};
+};
+
+&i2c3 {
+	status = "okay";
+
+	rtc_read: pcf8563@0xa3 {
+		status = "okay";
+	};
+
+	rtc_write: pcf8563@0xa2 {
+		status = "okay";
+	};
+};
+
+&uart1 {
+	status = "okay";
+};
+
+&uart2 {
+	status = "okay";
+};
+
+&uart3 {
+	status = "okay";
+};
+
+&uart4 {
+	status = "okay";
+};
+
+&uart5 {
+	status = "okay";
+};
+
+&usbh1 {
+	status = "okay";
+};
+
+&usbotg {
+	status = "okay";
+};
+
+&usdhc2 {
+	status = "okay";
+};
+
+&can1 {
+	status = "okay";
+};
+
+&can2 {
+	status = "okay";
+};
+
+&v4l2_cap_0 {
+	status = "okay";
+};
+
+&v4l2_cap_1 {
+	ipu_id = <1>;
+	csi_id = <1>;
+	status = "okay";
+};
+
+&v4l2_out {
+	status = "okay";
+};
+
