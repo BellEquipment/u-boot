@@ -19,7 +19,7 @@
  * GNU General Public License for more details.
  */
 #include <common.h>
-#include <err.h>
+#include <linux/err.h>
 #include <asm/arch/clock.h>
 #include <asm/arch/crm_regs.h>
 #include <asm/arch/iomux.h>
