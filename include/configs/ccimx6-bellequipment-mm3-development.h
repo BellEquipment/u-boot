@@ -23,8 +23,6 @@
 
 #define CONFIG_MACH_TYPE 4899
 
-#error "test"
-
 #ifdef CONFIG_MX6QP
 #error "ccimx6-bellequipment-mm3-development is configured to use MX6Q"
 #endif /* CONFIG_MX6QP */
