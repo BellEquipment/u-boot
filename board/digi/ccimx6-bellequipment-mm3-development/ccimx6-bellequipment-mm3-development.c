@@ -19,13 +19,15 @@
  * GNU General Public License for more details.
  */
 #include <common.h>
-#include <linux/err.h>
 #include <asm/arch/clock.h>
 #include <asm/arch/crm_regs.h>
+#include <asm/arch/gpio.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/mx6-pins.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/gpio.h>
+#include <asm/io.h>
+#include <linux/err.h>
 #ifdef CONFIG_OF_LIBFDT
 #include <fdt_support.h>
 #endif
@@ -300,7 +302,7 @@ static void setup_iomux_enet_bell_mm3 ( void )
 	imx_iomux_v3_setup_multiple_pads(enet_pads_100, ARRAY_SIZE(enet_pads_100));
 }
 
-int board_eth_init(struct bd_info *bis)
+int board_eth_init(bd_t *bis)
 {
 	if (is_mx6dqp()) {
 		int ret;
