@@ -18,18 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-#include <command.h>
 #include <common.h>
 #include <asm/arch/clock.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/mx6-pins.h>
 #include <asm/arch/sys_proto.h>
-#include <asm/global_data.h>
 #include <asm/gpio.h>
 #ifdef CONFIG_OF_LIBFDT
 #include <fdt_support.h>
 #endif
-#include <fsl_esdhc_imx.h>
+#include <fsl_esdhc.h>
 #include <fuse.h>
 #include <micrel.h>
 #include <miiphy.h>
@@ -38,13 +36,14 @@
 #include <command.h>
 #ifdef CONFIG_SYS_I2C_MXC
 #include <i2c.h>
-#include <asm/mach-imx/mxc_i2c.h>
+#include <asm/imx-common/mxc_i2c.h>
 #endif
-#include <asm/mach-imx/boot_mode.h>
-#include <asm/mach-imx/iomux-v3.h>
+#include <asm/imx-common/boot_mode.h>
+#include <asm/imx-common/iomux-v3.h>
 #include "../ccimx6/ccimx6.h"
 #include "../common/carrier_board.h"
 #include "../common/helper.h"
+#include "../common/hwid.h"
 #include "../common/trustfence.h"
 
 DECLARE_GLOBAL_DATA_PTR;
