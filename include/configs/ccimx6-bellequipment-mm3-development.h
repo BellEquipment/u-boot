@@ -19,34 +19,33 @@
 #define __CCIMX6SBC_CONFIG_H
 
 #include "ccimx6_common.h"
-#include <asm/mach-imx/gpio.h>
+#include <asm/imx-common/gpio.h>
 
-#define CONFIG_MACH_TYPE		4899
+#define CONFIG_MACH_TYPE (4899)
 
 #ifdef CONFIG_MX6QP
-#undef CONFIG_SYS_BOARD
-#define CONFIG_SYS_BOARD		"ccimx6-bellequipment-mm3-development"
-#endif
-#define CONFIG_BOARD_DESCRIPTION	"Bell Equipment MM3 Development"
+#error "ccimx6-bellequipment-mm3-development is configured to use MX6Q"
+#endif /* CONFIG_MX6QP */
+#define CONFIG_BOARD_DESCRIPTION "Bell Equipment MM3 Development"
 
-#define CONFIG_CONS_INDEX		1
-#define CONFIG_MXC_UART_BASE		UART4_BASE
-#define CONSOLE_DEV			"ttymxc3"
-#define CONFIG_BAUDRATE			115200
+#define CONFIG_CONS_INDEX    (1)
+#define CONFIG_MXC_UART_BASE (UART4_BASE)
+#define CONSOLE_DEV          ("ttymxc3")
+#define CONFIG_BAUDRATE      (115200)
 
 #undef CONFIG_DEFAULT_FDT_FILE
-#define CONFIG_DEFAULT_FDT_FILE		"imx6q-" CONFIG_SYS_BOARD ".dtb"
+#define CONFIG_DEFAULT_FDT_FILE ("imx6q-" CONFIG_SYS_BOARD ".dtb")
 
-#define CONFIG_SYS_FSL_USDHC_NUM	2
+#define CONFIG_SYS_FSL_USDHC_NUM (2)
 
 /* Media type for firmware updates */
-#define CONFIG_SYS_STORAGE_MEDIA	"mmc"
+#define CONFIG_SYS_STORAGE_MEDIA "mmc"
 
 /* Ethernet PHY */
-#define CONFIG_ENET_PHYADDR_MICREL	1
-#define CONFIG_FEC_XCV_TYPE		RMII
-#define PHY_ANEG_TIMEOUT		8000
-#define CONFIG_ETHPRIME		"FEC"
+#define CONFIG_ENET_PHYADDR_MICREL (1)
+#define CONFIG_FEC_XCV_TYPE        (RMII)
+#define PHY_ANEG_TIMEOUT           (8000)
+#define CONFIG_ETHPRIME            ("FEC")
 
 /* I2C */
 #define CONFIG_SYS_I2C_MXC_I2C1
@@ -64,10 +63,10 @@
 /* For the SBC, the carrier board version is stored in Bank 4 Word 6 (GP1)
  * in bits 3..0 */
 #define CONFIG_CARRIERBOARD_VERSION_ON_OTP
-#define CONFIG_CARRIERBOARD_VERSION_BANK	4
-#define CONFIG_CARRIERBOARD_VERSION_WORD	6
-#define CONFIG_CARRIERBOARD_VERSION_MASK	0xf
-#define CONFIG_CARRIERBOARD_VERSION_OFFSET	0
+#define CONFIG_CARRIERBOARD_VERSION_BANK   (4)
+#define CONFIG_CARRIERBOARD_VERSION_WORD   (6)
+#define CONFIG_CARRIERBOARD_VERSION_MASK   (0xf)
+#define CONFIG_CARRIERBOARD_VERSION_OFFSET (0)
 #endif /* CONFIG_HAS_CARRIERBOARD_VERSION */
 
 /* Carrier board ID in OTP bits */
@@ -76,10 +75,10 @@
 /* For the SBC, the carrier board ID is stored in Bank 4 Word 6 (GP1)
  * in bits 11..4 */
 #define CONFIG_CARRIERBOARD_ID_ON_OTP
-#define CONFIG_CARRIERBOARD_ID_BANK	4
-#define CONFIG_CARRIERBOARD_ID_WORD	6
-#define CONFIG_CARRIERBOARD_ID_MASK	0xff
-#define CONFIG_CARRIERBOARD_ID_OFFSET	4
+#define CONFIG_CARRIERBOARD_ID_BANK   (4)
+#define CONFIG_CARRIERBOARD_ID_WORD   (6)
+#define CONFIG_CARRIERBOARD_ID_MASK   (0xff)
+#define CONFIG_CARRIERBOARD_ID_OFFSET (4)
 
 /*
  * Custom carrier board IDs
@@ -89,11 +88,11 @@
  */
 
 /* Digi ConnectCore 6 carrier board IDs */
-#define CCIMX6SBC_ID129		129
-#define CCIMX6SBC_ID130		130
-#define CCIMX6SBC_ID131		131
-#define CCIMX6QPSBC_ID160	160
-#define BELLMM3_DEVELOPMENT 1
+#define CCIMX6SBC_ID129     (129)
+#define CCIMX6SBC_ID130     (130)
+#define CCIMX6SBC_ID131     (131)
+#define CCIMX6QPSBC_ID160   (160)
+#define BELLMM3_DEVELOPMENT (1)
 #endif /* CONFIG_HAS_CARRIERBOARD_ID */
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -217,6 +216,6 @@
 		"source ${loadaddr};" \
 	"fi;"
 
-#endif	/* CONFIG_SECURE_BOOT */
+#endif /* CONFIG_SECURE_BOOT */
 
-#endif                         /* __CCIMX6SBC_CONFIG_H */
+#endif /* __CCIMX6SBC_CONFIG_H */
