@@ -21,31 +21,31 @@
 #include "ccimx6_common.h"
 #include <asm/imx-common/gpio.h>
 
-#define CONFIG_MACH_TYPE (4899)
+#define CONFIG_MACH_TYPE 4899
 
 #ifdef CONFIG_MX6QP
 #error "ccimx6-bellequipment-mm3-development is configured to use MX6Q"
 #endif /* CONFIG_MX6QP */
 #define CONFIG_BOARD_DESCRIPTION "Bell Equipment MM3 Development"
 
-#define CONFIG_CONS_INDEX    (1)
-#define CONFIG_MXC_UART_BASE (UART4_BASE)
-#define CONSOLE_DEV          ("ttymxc3")
-#define CONFIG_BAUDRATE      (115200)
+#define CONFIG_CONS_INDEX    1
+#define CONFIG_MXC_UART_BASE UART4_BASE
+#define CONSOLE_DEV          "ttymxc3"
+#define CONFIG_BAUDRATE      115200
 
 #undef CONFIG_DEFAULT_FDT_FILE
-#define CONFIG_DEFAULT_FDT_FILE ("imx6q-" CONFIG_SYS_BOARD ".dtb")
+#define CONFIG_DEFAULT_FDT_FILE "zImage-imx6q-" CONFIG_SYS_BOARD ".dtb"
 
-#define CONFIG_SYS_FSL_USDHC_NUM (2)
+#define CONFIG_SYS_FSL_USDHC_NUM 2
 
 /* Media type for firmware updates */
 #define CONFIG_SYS_STORAGE_MEDIA "mmc"
 
 /* Ethernet PHY */
-#define CONFIG_ENET_PHYADDR_MICREL (1)
-#define CONFIG_FEC_XCV_TYPE        (RMII)
-#define PHY_ANEG_TIMEOUT           (8000)
-#define CONFIG_ETHPRIME            ("FEC")
+#define CONFIG_ENET_PHYADDR_MICREL 1
+#define CONFIG_FEC_XCV_TYPE        RMII
+#define PHY_ANEG_TIMEOUT           8000
+#define CONFIG_ETHPRIME            "FEC"
 
 /* I2C */
 #define CONFIG_SYS_I2C_MXC_I2C1
@@ -63,10 +63,10 @@
 /* For the SBC, the carrier board version is stored in Bank 4 Word 6 (GP1)
  * in bits 3..0 */
 #define CONFIG_CARRIERBOARD_VERSION_ON_OTP
-#define CONFIG_CARRIERBOARD_VERSION_BANK   (4)
-#define CONFIG_CARRIERBOARD_VERSION_WORD   (6)
-#define CONFIG_CARRIERBOARD_VERSION_MASK   (0xf)
-#define CONFIG_CARRIERBOARD_VERSION_OFFSET (0)
+#define CONFIG_CARRIERBOARD_VERSION_BANK   4
+#define CONFIG_CARRIERBOARD_VERSION_WORD   6
+#define CONFIG_CARRIERBOARD_VERSION_MASK   0xf
+#define CONFIG_CARRIERBOARD_VERSION_OFFSET 0
 #endif /* CONFIG_HAS_CARRIERBOARD_VERSION */
 
 /* Carrier board ID in OTP bits */
@@ -75,10 +75,10 @@
 /* For the SBC, the carrier board ID is stored in Bank 4 Word 6 (GP1)
  * in bits 11..4 */
 #define CONFIG_CARRIERBOARD_ID_ON_OTP
-#define CONFIG_CARRIERBOARD_ID_BANK   (4)
-#define CONFIG_CARRIERBOARD_ID_WORD   (6)
-#define CONFIG_CARRIERBOARD_ID_MASK   (0xff)
-#define CONFIG_CARRIERBOARD_ID_OFFSET (4)
+#define CONFIG_CARRIERBOARD_ID_BANK   4
+#define CONFIG_CARRIERBOARD_ID_WORD   6
+#define CONFIG_CARRIERBOARD_ID_MASK   0xff
+#define CONFIG_CARRIERBOARD_ID_OFFSET 4
 
 /*
  * Custom carrier board IDs
@@ -99,6 +99,9 @@
 	CONFIG_DEFAULT_NETWORK_SETTINGS \
 	RANDOM_UUIDS \
 	ALTBOOTCMD \
+"bootcmd_mfg=fastboot " __stringify(CONFIG_FASTBOOT_USB_DEV) "\0" \
+	"dualboot=no\0" \
+	"bootlimit=3\0" \
 	"dboot_kernel_var=zimage\0" \
 	"script=boot.scr\0" \
 	"loadscript=load mmc ${mmcbootdev}:${mmcpart} ${loadaddr} ${script}\0" \
@@ -115,9 +118,9 @@
 	"fdt_high=0xffffffff\0"	  \
 	"initrd_high=0xffffffff\0" \
 	"update_addr=" __stringify(CONFIG_DIGI_UPDATE_ADDR) "\0" \
-	"mmcbootpart=" __stringify(EMMC_BOOT_PART) "\0" \
+	"mmcbootpart=" __stringify(CONFIG_SYS_BOOT_PART_EMMC) "\0" \
 	"mmcdev=0\0" \
-	"mmcpart=" BOOT_PARTITION "\0" \
+	"mmcpart=" CONFIG_BOOT_PARTITION "\0" \
 	"mmcargs=setenv bootargs console=${console},${baudrate} ${smp} " \
 		"root=/dev/mmcblk0p2 rootwait rw\0" \
 	"loaduimage=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${uimage}\0" \
@@ -128,15 +131,9 @@
 	"boot_file=boot.img\0" \
 	"system_file=system.img\0" \
 	"partition_mmc_android=mmc rescan;" \
-		"if mmc dev ${mmcdev} 0; then " \
+		"if mmc dev ${mmcdev}; then " \
 			"gpt write mmc ${mmcdev} ${parts_android};" \
 			"mmc rescan;" \
-		"else " \
-			"if mmc dev ${mmcdev};then " \
-				"gpt write mmc ${mmcdev} ${parts_android};" \
-				"mmc rescan;" \
-			"else;" \
-			"fi;" \
 		"fi;\0" \
 	"bootargs_mmc_android=setenv bootargs console=${console},${baudrate} " \
 		"${bootargs_android} " \
@@ -168,17 +165,15 @@
 	"linux_file=dey-image-qt-xwayland-" CONFIG_SYS_BOARD ".boot.vfat\0" \
 	"rootfs_file=dey-image-qt-xwayland-" CONFIG_SYS_BOARD ".ext4\0" \
 	"partition_mmc_linux=mmc rescan;" \
-		"if mmc dev ${mmcdev} 0; then " \
-			"gpt write mmc ${mmcdev} ${parts_linux};" \
-			"mmc rescan;" \
+		"if mmc dev ${mmcdev}; then " \
+			"if test \"${dualboot}\" = yes; then " \
+				"gpt write mmc ${mmcdev} ${parts_linux_dualboot};" \
 		"else " \
-			"if mmc dev ${mmcdev};then " \
-				"gpt write mmc ${mmcdev} ${parts_linux};" \
-				"mmc rescan;" \
-			"else;" \
-			"fi;" \
+			"gpt write mmc ${mmcdev} ${parts_linux};" \
+		"fi;" \
+		"mmc rescan;" \
 		"fi;\0" \
-	"recoverycmd=setenv mmcpart " RECOVERY_PARTITION ";" \
+	"recoverycmd=setenv mmcpart " CONFIG_RECOVERY_PARTITION ";" \
 		"boot\0" \
 	"recovery_file=recovery.img\0" \
 	"install_android_fw_sd=if load mmc 1 ${loadaddr} " \
@@ -193,9 +188,9 @@
 		"if load usb 0 ${loadaddr} install_linux_fw_usb.scr;then " \
 			"source ${loadaddr};" \
 		"fi;\0" \
+	"active_system=linux_a\0" \
 	""	/* end line */
 
-#undef CONFIG_BOOTCOMMAND
 #ifdef CONFIG_SECURE_BOOT
 /*
  * Authenticate bootscript before running it. IVT offset is at
