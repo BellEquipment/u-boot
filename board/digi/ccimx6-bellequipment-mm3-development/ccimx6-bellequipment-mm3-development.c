@@ -46,6 +46,7 @@
 #include "../common/helper.h"
 #include "../common/hwid.h"
 #include "../common/trustfence.h"
+#include "../../../drivers/net/fec_mxc.h"
 
 DECLARE_GLOBAL_DATA_PTR;
 
