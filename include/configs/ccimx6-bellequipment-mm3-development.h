@@ -96,10 +96,6 @@
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	CONFIG_DEFAULT_NETWORK_SETTINGS \
 	RANDOM_UUIDS \
-	ALTBOOTCMD \
-"bootcmd_mfg=fastboot " __stringify(CONFIG_FASTBOOT_USB_DEV) "\0" \
-	"dualboot=no\0" \
-	"bootlimit=3\0" \
 	"dboot_kernel_var=zimage\0" \
 	"script=boot.scr\0" \
 	"loadscript=load mmc ${mmcbootdev}:${mmcpart} ${loadaddr} ${script}\0" \
@@ -128,14 +124,6 @@
 	"uboot_file=u-boot.imx\0" \
 	"boot_file=boot.img\0" \
 	"system_file=system.img\0" \
-	"partition_mmc_android=mmc rescan;" \
-		"if mmc dev ${mmcdev}; then " \
-			"gpt write mmc ${mmcdev} ${parts_android};" \
-			"mmc rescan;" \
-		"fi;\0" \
-	"bootargs_mmc_android=setenv bootargs console=${console},${baudrate} " \
-		"${bootargs_android} " \
-		"${bootargs_once} ${extra_bootargs}\0" \
 	"bootargs_tftp=" \
 		"if test ${ip_dyn} = yes; then " \
 			"bootargs_ip=\"ip=dhcp\";" \
@@ -144,12 +132,6 @@
 			"\\${gatewayip}:\\${netmask}:\\${hostname}:" \
 			"eth0:off\";" \
 		"fi;\0" \
-	"bootargs_tftp_android=run bootargs_tftp;" \
-		"setenv bootargs console=${console},${baudrate} " \
-		"${bootargs_android} root=/dev/nfs " \
-		"${bootargs_ip} nfsroot=${serverip}:${rootpath},v3,tcp " \
-		"${bootargs_once} ${extra_bootargs}\0" \
-	"bootargs_nfs_android=run bootargs_tftp_android\0" \
 	"mmcroot=PARTUUID=1c606ef5-f1ac-43b9-9bb5-d5c578580b6b\0" \
 	"bootargs_mmc_linux=setenv bootargs console=${console},${baudrate} " \
 		"${bootargs_linux} root=${mmcroot} rootwait rw " \
@@ -163,21 +145,19 @@
 	"linux_file=dey-image-qt-xwayland-" CONFIG_SYS_BOARD ".boot.vfat\0" \
 	"rootfs_file=dey-image-qt-xwayland-" CONFIG_SYS_BOARD ".ext4\0" \
 	"partition_mmc_linux=mmc rescan;" \
-		"if mmc dev ${mmcdev}; then " \
-			"if test \"${dualboot}\" = yes; then " \
-				"gpt write mmc ${mmcdev} ${parts_linux_dualboot};" \
-		"else " \
+		"if mmc dev ${mmcdev} 0; then " \
 			"gpt write mmc ${mmcdev} ${parts_linux};" \
-		"fi;" \
+			"mmc rescan;" \
+		"else " \
+			"if mmc dev ${mmcdev};then " \
+				"gpt write mmc ${mmcdev} ${parts_linux};" \
 		"mmc rescan;" \
+			"else;" \
+			"fi;" \
 		"fi;\0" \
 	"recoverycmd=setenv mmcpart " CONFIG_RECOVERY_PARTITION ";" \
 		"boot\0" \
 	"recovery_file=recovery.img\0" \
-	"install_android_fw_sd=if load mmc 1 ${loadaddr} " \
-		"install_android_fw_sd.scr;then " \
-			"source ${loadaddr};" \
-		"fi;\0" \
 	"install_linux_fw_sd=if load mmc 1 ${loadaddr} " \
 		"install_linux_fw_sd.scr;then " \
 			"source ${loadaddr};" \
@@ -186,7 +166,6 @@
 		"if load usb 0 ${loadaddr} install_linux_fw_usb.scr;then " \
 			"source ${loadaddr};" \
 		"fi;\0" \
-	"active_system=linux_a\0" \
 	""	/* end line */
 
 #ifdef CONFIG_SECURE_BOOT
