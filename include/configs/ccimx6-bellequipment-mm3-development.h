@@ -15,13 +15,15 @@
  * GNU General Public License for more details.
  */
 
-#ifndef __CCIMX6SBC_CONFIG_H
-#define __CCIMX6SBC_CONFIG_H
+#ifndef __CCIMX6_BELLEQUIPMENT_MM3_DEVELOPMENT_CONFIG_H
+#define __CCIMX6_BELLEQUIPMENT_MM3_DEVELOPMENT_CONFIG_H
 
 #include "ccimx6_common.h"
 #include <asm/imx-common/gpio.h>
 
 #define CONFIG_MACH_TYPE 4899
+
+#error "test"
 
 #ifdef CONFIG_MX6QP
 #error "ccimx6-bellequipment-mm3-development is configured to use MX6Q"
@@ -213,4 +215,4 @@
 
 #endif /* CONFIG_SECURE_BOOT */
 
-#endif /* __CCIMX6SBC_CONFIG_H */
+#endif /* __CCIMX6_BELLEQUIPMENT_MM3_DEVELOPMENT_CONFIG_H */
