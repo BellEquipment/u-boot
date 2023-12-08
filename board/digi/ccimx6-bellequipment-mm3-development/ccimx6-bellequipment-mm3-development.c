@@ -19,14 +19,13 @@
  * GNU General Public License for more details.
  */
 #include <common.h>
+#include <asm/io.h>
 #include <asm/arch/clock.h>
-#include <asm/arch/crm_regs.h>
-#include <asm/arch/gpio.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/mx6-pins.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/gpio.h>
-#include <asm/io.h>
+#include <asm/arch/gpio.h>
 #include <linux/err.h>
 #ifdef CONFIG_OF_LIBFDT
 #include <fdt_support.h>
@@ -50,6 +49,7 @@
 #include "../common/hwid.h"
 #include "../common/trustfence.h"
 #include "../../../drivers/net/fec_mxc.h"
+#include <asm/arch/crm_regs.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
