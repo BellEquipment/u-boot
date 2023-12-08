@@ -20,6 +20,7 @@
  */
 #include <common.h>
 #include <asm/arch/clock.h>
+#include <asm/arch/crm_regs.h>
 #include <asm/arch/iomux.h>
 #include <asm/arch/mx6-pins.h>
 #include <asm/arch/sys_proto.h>
@@ -233,7 +234,7 @@ static int mx6_rgmii_rework(struct phy_device *phydev)
 				   MII_KSZ9031_EXT_RGMII_CLOCK_SKEW,
 				   MII_KSZ9031_MOD_DATA_NO_POST_INC, 0x03ff);
 
-	phy_mode = env_get("phy_mode");
+	phy_mode = getenv("phy_mode");
 	if (!strcmp("master", phy_mode)) {
 		unsigned short reg;
 
@@ -293,7 +294,7 @@ static iomux_v3_cfg_t const enet_pads_100[] = {
 static void setup_iomux_enet_bell_mm3 ( void )
 {
 	/* 10/100 ENET */
-	enet_xcv_type = RMII;
+	setup_iomux_enet();
 	imx_iomux_v3_setup_multiple_pads(enet_pads_100, ARRAY_SIZE(enet_pads_100));
 }
 
@@ -415,7 +416,7 @@ int board_init(void)
 	board_version = get_carrierboard_version();
 	board_id = get_carrierboard_id();
 
-#ifdef CONFIG_SATA
+#ifdef CONFIG_CMD_SATA
 	setup_iomux_sata();
 #endif
 
@@ -429,8 +430,8 @@ int checkboard(void)
 	print_ccimx6_info();
 	print_carrierboard_info();
 	printf("Boot device: %s\n", get_boot_device_name());
-	printf("Config:      %s\n", "Bell MM3 Development Board"));
-	printf("Version:     %d\n", DEVELOPMENT_VERSION));
+	printf("Config:      %s\n", "Bell MM3 Development Board");
+	printf("Version:     %d\n", DEVELOPMENT_VERSION);
 
 	return 0;
 }
@@ -496,7 +497,7 @@ int board_late_init(void)
 		IMX_GPIO_NR(4, 5),	// 7 - GSM Reset
 		IMX_GPIO_NR(3, 10),	// 8 - GSM VUSB Enable
 		// Input(s)
-		IMX_GPIO_NR(3, 23)	//  9 - Capacitor Good GSM
+		IMX_GPIO_NR(3, 23),	//  9 - Capacitor Good GSM
 		IMX_GPIO_NR(3, 27),	// 10 - Capacitor Filter GSM
 		IMX_GPIO_NR(5, 20),	// 11 - Power Fail Status Output for GSM
 		IMX_GPIO_NR(5, 2),	// 12 - 5V System Good GSM
@@ -516,7 +517,7 @@ int board_late_init(void)
 		// Outputs
 		IMX_GPIO_NR(2, 5),	// 20 - IO Controller Reset
 		IMX_GPIO_NR(2, 7),	// 21 - EXP_GPIO_2
-		IMX_GPIO_NR(2, 24)	// 22 - GPIO_3 - Test Point
+		IMX_GPIO_NR(2, 24),	// 22 - GPIO_3 - Test Point
 		IMX_GPIO_NR(1, 9),	// 23 - BT_DISABLE_N
 		// Inputs
 		IMX_GPIO_NR(2, 23)	// 24 - IO IRQ
@@ -706,8 +707,9 @@ int board_late_init(void)
 
 #if defined(CONFIG_OF_BOARD_SETUP)
 /* Platform function to modify the FDT as needed */
-int ft_board_setup(void *blob, struct bd_info *bd)
+int ft_board_setup(void *blob, bd_t *bd)
 {
+	fdt_fixup_hwid(blob);
 	fdt_fixup_ccimx6(blob);
 	fdt_fixup_carrierboard(blob);
 
