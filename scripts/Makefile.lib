@@ -373,7 +373,10 @@ $(obj)/%.efi: $(obj)/%.so
 
 quiet_cmd_efi_ld = LD      $@
 cmd_efi_ld = $(LD) -nostdlib -znocombreloc -T $(EFI_LDS_PATH) -shared \
-		-Bsymbolic $^ -o $@
+		-Bsymbolic lib/efi_loader/helloworld.o \
+                	arch/arm/lib/crt0_arm_efi.o \
+                	arch/arm/lib/reloc_arm_efi.o \
+					-o $@
 
 EFI_LDS_PATH = $(srctree)/arch/$(ARCH)/lib/$(EFI_LDS)
 
